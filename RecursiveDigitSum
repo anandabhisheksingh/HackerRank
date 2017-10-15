@@ -1,0 +1,58 @@
+// Problem description 
+// https://www.hackerrank.com/challenges/recursive-digit-sum
+
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    // Save super number. Update the value at each recursion
+    static long ans = 0;
+    
+    // k 
+    static int hk = 0;
+    
+    // Super number 
+    // Description : Finds super number of 's'
+    static void findSuperNumber (String s,int ki)
+    {
+        // Length of the string is one, we have found the answer
+        if (s.length() < 2)
+        {
+            ans = Long.parseLong(s);
+            return;
+        }
+        
+        long num = 0;
+        
+        // Sum each digit of 's'
+        for(int k=0; k < s.length(); k++)
+        {
+           // Convert character to number
+           num = num + s.charAt(k) - '0';
+        }
+        
+        // To avoid interger overflow multiply here to generate sum of super number
+        if (Solution.hk == ki)
+        {
+            num = ki * num;
+        }
+        
+        // Call for found sum
+        findSuperNumber(Long.toString(num),ki-1);
+    }
+    
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner scan = new Scanner(System.in);
+        
+        String number = scan.next();     // n
+        
+        Solution.hk   = scan.nextInt();  // k
+        
+        // Find super number
+        Solution.findSuperNumber(number,Solution.hk);            
+        
+        System.out.println(Solution.ans);
+    }
+}
