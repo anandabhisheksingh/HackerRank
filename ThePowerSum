@@ -1,0 +1,43 @@
+// Problem description at 
+// https://www.hackerrank.com/challenges/the-power-sum
+
+import java.util.*;
+
+public class Solution {
+
+    // Number of ways power sum exists
+    static int numWay = 0;
+    
+    // Power sum function
+    // Description : Find the power sum of 'num'
+    static int powerSum(int num, int n, int val, int index)
+    { 
+        if (val == 0){
+           numWay =  numWay +1;
+        }
+     
+        int nth_num = (int)Math.floor(Math.pow(num, 1.0/n));
+        
+        for (int i = index + 1; i <= nth_num; i++)
+        {
+            int residue = val - (int)Math.pow(i,n);
+            
+            // If residue is greater than zero, check for next number is part of power sum
+            if (residue >= 0)
+            {
+                fun(num, n, residue,i);
+            }
+        }
+              
+        return numWay;
+    }
+    
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int num = scan.nextInt();  // X
+        int n   = scan.nextInt();  // N
+       
+        // Find power sum
+        System.out.println(Solution.powerSum(num,n,num,0));
+    }
+}
