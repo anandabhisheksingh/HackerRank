@@ -1,0 +1,94 @@
+// https://www.hackerrank.com/challenges/arithmetic-expressions
+// Solution of above problem
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    static char [] operator = {'*','+','-'};
+    
+    static long evaluateExpression(long a, int b, char c) {
+        
+        long result = 0;
+        switch(c) {
+            case '+' :
+                result = a + b;
+                break;
+            case '-':
+                result = a - b;
+                break;
+            case '*' :
+                result = a*b;
+                break;
+        }
+        
+        return result;
+    }
+    
+    static boolean divisibleUtil(int [] a_i, List<Character> expression, int index, long evaluateExp) {
+        
+        if (index == a_i.length) {
+            
+            if (evaluateExp % 101 == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        
+        for (int i = 0; i < operator.length; i++) {
+            
+            // Evaluate expression
+            long evaluate = evaluateExpression(evaluateExp, a_i[index], operator[i]); 
+            boolean divBy101 = divisibleUtil(a_i, expression, index+1, evaluate%101);
+            
+            if (divBy101) {
+                // Valid expression found, store operators
+                expression.add(operator[i]);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public static void divisibleBy101(int [] a_i) {
+        
+        List<Character> expression = new ArrayList<Character>();
+        
+        int evaluateExp       = a_i[0];
+        
+        // Find the expression
+        divisibleUtil(a_i, expression,1,evaluateExp);
+        
+        // Print the expression 
+        int y = 0;
+        int expSize = expression.size();
+        
+        System.out.print(a_i[y]);
+        
+        for ( ; y < expSize; y++ ) {
+        	
+            System.out.print(expression.get(expSize -y -1) + Integer.toString(a_i[y+1]));
+        }
+        
+        System.out.println("");
+    }
+    
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        
+        Scanner scan = new Scanner(System.in);
+        int n        = Integer.parseInt(scan.nextLine().trim());      // n
+        String [] a  = scan.nextLine().split(" ");                    // a_i
+        
+        int [] a_i = new int[n];
+        
+        for (int y = 0; y < a.length; y++) {
+            a_i[y] = Integer.parseInt(a[y]);
+        }
+        
+        divisibleBy101(a_i);
+    }
+}
