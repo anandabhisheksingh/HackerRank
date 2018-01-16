@@ -1,0 +1,98 @@
+// Solution of https://www.hackerrank.com/challenges/ctci-bfs-shortest-reach/problem
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+class Node {
+	int                index;                                 // Node id
+	ArrayList<Integer> adjacents = new ArrayList<Integer>();  // Neighbours on node 'index'
+	int                distance = -1;                         // Distance of node from root 
+
+	Node(int index) {
+		this.index = index;
+	}
+}
+
+public class Solution {
+	
+    static final int EDGE_DISTANCE = 6;
+   
+    // Find minimum distnace of all other node from 'referenceNode'
+    public void shortestDistance(Node [] nodes, int referenceNode) {
+    	
+    	Queue <Node>nextNode = new LinkedList<Node>();
+    	
+    	nextNode.add(nodes[referenceNode]);
+    	
+    	// Mark this node as visited
+    	nodes[referenceNode].distance = 0;
+    	
+    	// BFS traversal of graph
+    	while(!nextNode.isEmpty()) {
+    		
+    		Node head = nextNode.poll();
+    		
+    		for (int adjacents_n : head.adjacents) {
+    			
+    			Node n = nodes[adjacents_n];
+    			
+    			// Negative distance meaans node is not visited 
+    			if (n.distance < 0) {
+    				
+    				n.distance = head.distance + EDGE_DISTANCE;
+    				nextNode.add(n);
+    			}
+    		}
+    	}
+    	
+    	for (Node n : nodes) {
+    		
+    		// Skip printing the reference node
+    		if (n.distance != 0) {
+    			System.out.print(n.distance + " ");
+    		}
+    	}
+    	
+    	System.out.println();
+    }
+    
+    public static void main(String[] args) {
+    	
+        Scanner in = new Scanner(System.in);
+       
+        // Number of quaries
+        int numQuaries  = in.nextInt();
+        
+        for(int quari_i=0; quari_i < numQuaries; quari_i++){
+        	
+            int numVertices = in.nextInt();
+            
+            // Array index are based so add one to take in to account
+            Node [] nodes = new Node[numVertices];
+            
+            for (int i = 0; i < nodes.length; i++) {
+				nodes[i] = new Node(i);
+			}
+            
+            int numEdges    = in.nextInt();
+            
+            for (int edge_i = 0; edge_i < numEdges; edge_i++) {
+            	
+            	// Array index are zero based
+            	int u  = in.nextInt() - 1;
+            	int v  = in.nextInt() - 1;
+            	
+            	// Undirected graph
+    			nodes[u].adjacents.add(v);
+				nodes[v].adjacents.add(u);
+            }
+            
+            int startNode = in.nextInt() - 1;
+            
+            Solution s = new Solution();
+			s.shortestDistance(nodes, startNode);
+        }
+    }
+}
